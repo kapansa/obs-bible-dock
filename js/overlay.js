@@ -7,10 +7,8 @@ function handleVerseEvent(eventData) {
   if (!eventData) return;
 
   if (eventData.action === 'SHOW' && eventData.data) {
-    // Render scripture quote body
     verseText.innerHTML = `<span class="quote-mark">“</span>${eventData.data.text}<span class="quote-mark">”</span>`;
     
-    // Render enlarged scripture title and new gold metallic version badge
     verseReference.innerHTML = `
       <div class="ref-title">
         <span>${eventData.data.reference}</span>
@@ -18,7 +16,6 @@ function handleVerseEvent(eventData) {
       <span class="translation-badge">${eventData.data.translation}</span>
     `;
 
-    // Auto-scaling character limits for 80vw layout
     const len = eventData.data.text.length;
     verseContainer.classList.remove('scale-down-sm', 'scale-down-xs');
     if (len > 400) {
@@ -40,45 +37,40 @@ function handleVerseEvent(eventData) {
 function applySettings(s) {
   if (!s) return;
 
-  // Font Family
   if (s.fontFamily) verseContainer.style.fontFamily = `'${s.fontFamily}', sans-serif`;
 
-  // Base Font Size
   if (s.fontSize) {
     verseContainer.classList.remove('size-small', 'size-medium', 'size-large', 'size-xlarge');
     verseContainer.classList.add(`size-${s.fontSize}`);
   }
 
-  // Screen Position
   if (s.position) {
     wrapper.classList.remove('position-bottom', 'position-center', 'position-top');
     wrapper.classList.add(`position-${s.position}`);
   }
 
-  // Animation Style
   if (s.animation) {
     verseContainer.classList.remove('anim-fade', 'anim-slide', 'anim-none');
     verseContainer.classList.add(`anim-${s.animation}`);
   }
 
-  // Opacity & Background Image
   const opacityVal = s.opacity !== undefined ? s.opacity / 100 : 0.92;
-  if (s.bgImage) {
-    verseContainer.style.backgroundImage = `linear-gradient(rgba(10, 10, 14, ${opacityVal}), rgba(10, 10, 14, ${opacityVal})), url(${s.bgImage})`;
+  if (s.bgImage && s.bgImage.startsWith('data:image')) {
+    verseContainer.style.backgroundImage = `linear-gradient(rgba(10, 10, 14, ${opacityVal}), rgba(10, 10, 14, ${opacityVal})), url("${s.bgImage}")`;
+    verseContainer.style.backgroundSize = 'cover';
+    verseContainer.style.backgroundPosition = 'center';
   } else {
     verseContainer.style.backgroundImage = 'none';
     verseContainer.style.backgroundColor = `rgba(10, 10, 14, ${opacityVal})`;
   }
 }
 
-// Storage Listener for live updates
 window.addEventListener('storage', (e) => {
   if (e.key === 'obs_bible_event' && e.newValue) {
     handleVerseEvent(JSON.parse(e.newValue));
   }
 });
 
-// Load Initial Settings & Cache on Startup
 window.addEventListener('DOMContentLoaded', () => {
   const settings = localStorage.getItem('obs_bible_settings');
   if (settings) applySettings(JSON.parse(settings));

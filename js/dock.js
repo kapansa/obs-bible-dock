@@ -1,71 +1,41 @@
-// Bible Books Data Array with Bolls API IDs
+// Bolls.life Map & Data Structures
+const API_BASE = 'https://bolls.life';
+const TRANSLATION_MAP = {
+  'kjv': 'KJV', 'asv': 'ASV', 'web': 'WEB',
+  'ylt': 'YLT', 'dra': 'DRB', 'nkjv': 'NKJV',
+  'niv': 'NIV', 'niv2011': 'NIV2011', 'esv': 'ESV',
+  'nlt': 'NLT', 'nasb': 'NASB', 'rsv': 'RSV',
+  'amp': 'AMP', 'msg': 'MSG', 'csb17': 'CSB17',
+  'net': 'NET', 'gnv': 'GNV', 'lsv': 'LSV',
+  'bsb': 'BSB', 'mev': 'MEV', 'cev': 'CEVD',
+  'isv': 'ISV', 'erv': 'ERV', 'nlv': 'NLV',
+  'gnt': 'GNT', 'almeida': 'ALM21',
+  'synodal': 'SYNOD', 'cuv': 'CUV'
+};
+
 const BIBLE_BOOKS = [
-  { id: 1, name: "Genesis", aliases: ["gen", "ge", "gn"] },
-  { id: 2, name: "Exodus", aliases: ["exod", "ex", "ex0"] },
-  { id: 3, name: "Leviticus", aliases: ["lev", "le", "lv"] },
-  { id: 4, name: "Numbers", aliases: ["num", "nu", "nm", "nb"] },
-  { id: 5, name: "Deuteronomy", aliases: ["deut", "de", "dt"] },
-  { id: 6, name: "Joshua", aliases: ["josh", "jos", "jsh"] },
-  { id: 7, name: "Judges", aliases: ["judg", "jdg", "jg", "jdgs"] },
-  { id: 8, name: "Ruth", aliases: ["rut", "rth"] },
-  { id: 9, name: "1 Samuel", aliases: ["1sam", "1sa", "1s", "1 samuel"] },
-  { id: 10, name: "2 Samuel", aliases: ["2sam", "2sa", "2s", "2 samuel"] },
-  { id: 11, name: "1 Kings", aliases: ["1kgs", "1ki", "1k", "1 kings"] },
-  { id: 12, name: "2 Kings", aliases: ["2kgs", "2ki", "2k", "2 kings"] },
-  { id: 13, name: "1 Chronicles", aliases: ["1chr", "1ch", "1 chron"] },
-  { id: 14, name: "2 Chronicles", aliases: ["2chr", "2ch", "2 chron"] },
-  { id: 15, name: "Ezra", aliases: ["ezr", "ez"] },
-  { id: 16, name: "Nehemiah", aliases: ["neh", "ne"] },
-  { id: 17, name: "Esther", aliases: ["esth", "es"] },
-  { id: 18, name: "Job", aliases: ["jb"] },
-  { id: 19, name: "Psalms", aliases: ["psalm", "psa", "ps", "pss"] },
-  { id: 20, name: "Proverbs", aliases: ["prov", "pro", "pr", "prv"] },
-  { id: 21, name: "Ecclesiastes", aliases: ["eccl", "ecc", "ec"] },
-  { id: 22, name: "Song of Solomon", aliases: ["song", "sos", "so"] },
-  { id: 23, name: "Isaiah", aliases: ["isa", "is"] },
-  { id: 24, name: "Jeremiah", aliases: ["jer", "je", "jr"] },
-  { id: 25, name: "Lamentations", aliases: ["lam", "la"] },
-  { id: 26, name: "Ezekiel", aliases: ["ezek", "eze", "ezk"] },
-  { id: 27, name: "Daniel", aliases: ["dan", "da", "dn"] },
-  { id: 28, name: "Hosea", aliases: ["hos", "ho"] },
-  { id: 29, name: "Joel", aliases: ["joe", "jl"] },
-  { id: 30, name: "Amos", aliases: ["amo", "am"] },
-  { id: 31, name: "Obadiah", aliases: ["obad", "oba", "ob"] },
-  { id: 32, name: "Jonah", aliases: ["jon", "jnh"] },
-  { id: 33, name: "Micah", aliases: ["mic", "mc"] },
-  { id: 34, name: "Nahum", aliases: ["nah", "na"] },
-  { id: 35, name: "Habakkuk", aliases: ["hab", "hb"] },
-  { id: 36, name: "Zephaniah", aliases: ["zeph", "zep", "zp"] },
-  { id: 37, name: "Haggai", aliases: ["hag", "hg"] },
-  { id: 38, name: "Zechariah", aliases: ["zech", "zec", "zc"] },
-  { id: 39, name: "Malachi", aliases: ["mal", "ml"] },
-  { id: 40, name: "Matthew", aliases: ["matt", "mat", "mt"] },
-  { id: 41, name: "Mark", aliases: ["mrk", "mar", "mk"] },
-  { id: 42, name: "Luke", aliases: ["luk", "lk"] },
-  { id: 43, name: "John", aliases: ["jhn", "joh", "jn"] },
-  { id: 44, name: "Acts", aliases: ["act", "ac"] },
-  { id: 45, name: "Romans", aliases: ["rom", "ro", "rm"] },
-  { id: 46, name: "1 Corinthians", aliases: ["1cor", "1co", "1 cor"] },
-  { id: 47, name: "2 Corinthians", aliases: ["2cor", "2co", "2 cor"] },
-  { id: 48, name: "Galatians", aliases: ["gal", "ga"] },
-  { id: 49, name: "Ephesians", aliases: ["eph", "ep"] },
-  { id: 50, name: "Philippians", aliases: ["phil", "php", "pp"] },
-  { id: 51, name: "Colossians", aliases: ["col", "cl"] },
-  { id: 52, name: "1 Thessalonians", aliases: ["1thess", "1th", "1 ts"] },
-  { id: 53, name: "2 Thessalonians", aliases: ["2thess", "2th", "2 ts"] },
-  { id: 54, name: "1 Timothy", aliases: ["1tim", "1ti", "1 t"] },
-  { id: 55, name: "2 Timothy", aliases: ["2tim", "2ti", "2 t"] },
-  { id: 56, name: "Titus", aliases: ["tit", "ti"] },
-  { id: 57, name: "Philemon", aliases: ["phlm", "phm", "pm"] },
-  { id: 58, name: "Hebrews", aliases: ["heb", "he"] },
-  { id: 59, name: "James", aliases: ["jas", "jm"] },
-  { id: 60, name: "1 Peter", aliases: ["1pet", "1pe", "1p"] },
-  { id: 61, name: "2 Peter", aliases: ["2pet", "2pe", "2p"] },
-  { id: 62, name: "1 John", aliases: ["1jhn", "1jn", "1j"] },
-  { id: 63, name: "2 John", aliases: ["2jhn", "2jn", "2j"] },
-  { id: 64, name: "3 John", aliases: ["3jhn", "3jn", "3j"] },
-  { id: 65, name: "Jude", aliases: ["jud", "jd"] },
-  { id: 66, name: "Revelation", aliases: ["rev", "re", "rv"] }
+  ['Genesis','Gen',50],['Exodus','Exo',40],['Leviticus','Lev',27],
+  ['Numbers','Num',36],['Deuteronomy','Deu',34],['Joshua','Jos',24],
+  ['Judges','Jdg',21],['Ruth','Rut',4],['1 Samuel','1Sa',31],
+  ['2 Samuel','2Sa',24],['1 Kings','1Ki',22],['2 Kings','2Ki',25],
+  ['1 Chronicles','1Ch',29],['2 Chronicles','2Ch',36],['Ezra','Ezr',10],
+  ['Nehemiah','Neh',13],['Esther','Est',10],['Job','Job',42],
+  ['Psalms','Psa',150],['Proverbs','Pro',31],['Ecclesiastes','Ecc',12],
+  ['Song of Solomon','Son',8],['Isaiah','Isa',66],['Jeremiah','Jer',52],
+  ['Lamentations','Lam',5],['Ezekiel','Eze',48],['Daniel','Dan',12],
+  ['Hosea','Hos',14],['Joel','Joe',3],['Amos','Amo',9],
+  ['Obadiah','Oba',1],['Jonah','Jon',4],['Micah','Mic',7],
+  ['Nahum','Nah',3],['Habakkuk','Hab',3],['Zephaniah','Zep',3],
+  ['Haggai','Hag',2],['Zechariah','Zec',14],['Malachi','Mal',4],
+  ['Matthew','Mat',28],['Mark','Mar',16],['Luke','Luk',24],
+  ['John','Joh',21],['Acts','Act',28],['Romans','Rom',16],
+  ['1 Corinthians','1Co',16],['2 Corinthians','2Co',13],['Galatians','Gal',6],
+  ['Ephesians','Eph',6],['Philippians','Phi',4],['Colossians','Col',4],
+  ['1 Thessalonians','1Th',5],['2 Thessalonians','2Th',3],['1 Timothy','1Ti',6],
+  ['2 Timothy','2Ti',4],['Titus','Tit',3],['Philemon','Phm',1],
+  ['Hebrews','Heb',13],['James','Jam',5],['1 Peter','1Pe',5],
+  ['2 Peter','2Pe',3],['1 John','1Jo',5],['2 John','2Jo',1],
+  ['3 John','3Jo',1],['Jude','Jud',1],['Revelation','Rev',22]
 ];
 
 // DOM Elements
@@ -101,10 +71,10 @@ let currentVerseData = null;
 let currentBook = "", currentChapter = 1, currentVerseNum = 1;
 
 // Initialize Books Dropdown
-BIBLE_BOOKS.forEach(book => {
+BIBLE_BOOKS.forEach(([fullName]) => {
   const opt = document.createElement('option');
-  opt.value = book.name;
-  opt.textContent = book.name;
+  opt.value = fullName;
+  opt.textContent = fullName;
   bookSelect.appendChild(opt);
 });
 
@@ -114,17 +84,16 @@ verseInput.addEventListener('input', () => {
   suggestions.innerHTML = '';
   if (!val) { suggestions.classList.add('hidden'); return; }
 
-  const matches = BIBLE_BOOKS.filter(b => 
-    b.name.toLowerCase().startsWith(val) || 
-    b.aliases.some(a => a.startsWith(val))
+  const matches = BIBLE_BOOKS.filter(([name, abbr]) => 
+    name.toLowerCase().startsWith(val) || abbr.toLowerCase().startsWith(val)
   );
 
   if (matches.length > 0) {
-    matches.forEach(match => {
+    matches.forEach(([name]) => {
       const li = document.createElement('li');
-      li.textContent = match.name;
+      li.textContent = name;
       li.onclick = () => {
-        verseInput.value = match.name + ' ';
+        verseInput.value = name + ' ';
         suggestions.classList.add('hidden');
         verseInput.focus();
       };
@@ -162,15 +131,17 @@ verseSelect.addEventListener('change', () => {
   fetchVerse(query, versionSelect.value);
 });
 
-function populateChapters(book) {
+function populateChapters(bookName) {
   chapterSelect.innerHTML = '<option value="">Ch</option>';
   verseSelect.innerHTML = '<option value="">Vs</option>';
   verseSelect.disabled = true;
 
-  if (!book) { chapterSelect.disabled = true; return; }
+  const bookData = BIBLE_BOOKS.find(([name]) => name === bookName);
+  if (!bookData) { chapterSelect.disabled = true; return; }
 
   chapterSelect.disabled = false;
-  for (let i = 1; i <= 150; i++) {
+  const maxChapters = bookData[2];
+  for (let i = 1; i <= maxChapters; i++) {
     const opt = document.createElement('option');
     opt.value = i; opt.textContent = i;
     chapterSelect.appendChild(opt);
@@ -187,44 +158,37 @@ function populateVerses(count) {
   }
 }
 
-// Reference Parser: converts "John 3:16" -> { bookId: 43, bookName: "John", chapter: 3, verse: 16 }
-function parseReference(query) {
-  const regex = /^([1-3]?\s*[A-Za-z]+(?:\s+[A-Za-z]+)?)\s+(\d+)[:.](\d+)/;
-  const match = query.trim().match(regex);
+// Clean HTML & Strong's numbers from Bolls API text
+function buildDisplayText(raw) {
+  if (!raw) return '';
+  return raw
+    .replace(/<sup[^>]*>[\s\S]*?<\/sup>/gi, '') // Strip footnotes
+    .replace(/<S>\d+<\/S>/g, '')                 // Strip Strong's numbers
+    .replace(/<[^>]+>/g, '')                      // Strip all HTML tags
+    .replace(/\n\d+\s*/g, ' ')                   // Strip verse numbers
+    .replace(/\s+([.,;:!?])/g, '$1')             // Fix spacing around punctuation
+    .replace(/\s+/g, ' ')                        // Collapse whitespace
+    .trim();
+}
 
-  if (!match) return null;
-
-  const rawBook = match[1].toLowerCase().replace(/\s+/g, ' ').trim();
-  const chapter = parseInt(match[2], 10);
-  const verse = parseInt(match[3], 10);
-
-  const foundBook = BIBLE_BOOKS.find(b => 
-    b.name.toLowerCase() === rawBook || 
-    b.aliases.includes(rawBook)
-  );
-
-  if (!foundBook) return null;
-
+// Parse "John 3:16" or "John 3:16-18" into structured object
+function parseReference(str) {
+  const m = str.trim().match(/^(.+?)\s+(\d+):(\d+)(?:-(\d+))?$/);
+  if (!m) return null;
   return {
-    bookId: foundBook.id,
-    bookName: foundBook.name,
-    chapter,
-    verse
+    book: m[1].trim(),
+    chapter: parseInt(m[2], 10),
+    verse: parseInt(m[3], 10),
+    endVerse: m[4] ? parseInt(m[4], 10) : null
   };
 }
 
-// Fetch Verse Logic (Multi-API with Offline Cache)
-searchForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const query = verseInput.value.trim();
-  if (query) fetchVerse(query, versionSelect.value);
-});
+// Strict Bolls.life Fetch Function
+async function fetchVerse(reference, translationKey) {
+  statusMessage.textContent = `Fetching ${reference}...`;
+  const cacheKey = `verse_cache_${reference}_${translationKey}`.toLowerCase();
 
-async function fetchVerse(query, translation) {
-  statusMessage.textContent = 'Fetching verse...';
-  const cacheKey = `verse_cache_${query}_${translation}`.toLowerCase();
-
-  // Check Local Cache
+  // Check Offline Cache
   const cached = localStorage.getItem(cacheKey);
   if (cached) {
     renderVerse(JSON.parse(cached));
@@ -232,55 +196,67 @@ async function fetchVerse(query, translation) {
     return;
   }
 
-  const parsed = parseReference(query);
+  const parsed = parseReference(reference);
+  if (!parsed) {
+    statusMessage.textContent = 'Invalid reference format. Try "John 3:16" or "John 3:16-18".';
+    previewCard.classList.add('hidden');
+    return;
+  }
+
+  const { book, chapter, verse, endVerse } = parsed;
+
+  const bookIndex = BIBLE_BOOKS.findIndex(([name, abbr]) => 
+    name.toLowerCase() === book.toLowerCase() || 
+    abbr.toLowerCase() === book.toLowerCase()
+  );
+
+  if (bookIndex === -1) {
+    statusMessage.textContent = `Book "${book}" not found.`;
+    previewCard.classList.add('hidden');
+    return;
+  }
+
+  const bookId = bookIndex + 1;
+  const translationCode = TRANSLATION_MAP[translationKey.toLowerCase()] || translationKey.toUpperCase();
 
   try {
-    // 1. Primary: Try Bolls.life API using numeric book IDs
-    if (parsed) {
-      const bollsUrl = `[https://bolls.life/get-verse/$](https://bolls.life/get-verse/$){translation.toUpperCase()}/${parsed.bookId}/${parsed.chapter}/${parsed.verse}/`;
-      const res = await fetch(bollsUrl);
+    let verses = [];
 
-      if (res.ok) {
+    if (endVerse && endVerse > verse) {
+      // Multi-verse range
+      for (let v = verse; v <= endVerse; v++) {
+        const url = `${API_BASE}/get-verse/${translationCode}/${bookId}/${chapter}/${v}/`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Verse range fetch error');
         const data = await res.json();
-        const cleanText = data.text ? data.text.replace(/<[^>]*>/g, '').trim() : '';
-
-        if (cleanText) {
-          const formatted = {
-            reference: `${parsed.bookName} ${parsed.chapter}:${parsed.verse}`,
-            text: cleanText,
-            translation: translation.toUpperCase()
-          };
-
-          localStorage.setItem(cacheKey, JSON.stringify(formatted));
-          renderVerse(formatted);
-          statusMessage.textContent = 'Verse ready.';
-          return;
-        }
+        verses.push(data);
       }
+    } else {
+      // Single verse
+      const url = `${API_BASE}/get-verse/${translationCode}/${bookId}/${chapter}/${verse}/`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Verse not found');
+      const data = await res.json();
+      verses.push(data);
     }
 
-    // 2. Fallback: Try Bible-API.com
-    const fallbackUrl = `[https://bible-api.com/$](https://bible-api.com/$){encodeURIComponent(query)}?translation=${translation.toLowerCase()}`;
-    const fallbackRes = await fetch(fallbackUrl);
+    const combinedText = verses.map(v => buildDisplayText(v.text)).join(' ');
+    const bookName = BIBLE_BOOKS[bookIndex][0];
+    const verseRef = endVerse && endVerse > verse ? `${chapter}:${verse}-${endVerse}` : `${chapter}:${verse}`;
+    const displayRef = `${bookName} ${verseRef}`;
 
-    if (fallbackRes.ok) {
-      const data = await fallbackRes.json();
-      const formatted = {
-        reference: data.reference,
-        text: data.text.trim(),
-        translation: translation.toUpperCase()
-      };
+    const formatted = {
+      reference: displayRef,
+      text: combinedText,
+      translation: translationCode
+    };
 
-      localStorage.setItem(cacheKey, JSON.stringify(formatted));
-      renderVerse(formatted);
-      statusMessage.textContent = 'Verse ready.';
-      return;
-    }
-
-    throw new Error('Verse not found in available translations.');
+    localStorage.setItem(cacheKey, JSON.stringify(formatted));
+    renderVerse(formatted);
+    statusMessage.textContent = 'Verse ready.';
 
   } catch (err) {
-    statusMessage.textContent = `Error: Could not find verse. Try standard format (e.g. John 3:16).`;
+    statusMessage.textContent = `Error: Could not find "${reference}" in ${translationCode}.`;
     previewCard.classList.add('hidden');
   }
 }

@@ -35,7 +35,7 @@
         <input 
           type="text" 
           id="verse-input" 
-          placeholder="Type reference (e.g. John 3:16)..." 
+          placeholder="Type reference (e.g. John 3:16 or John 3:16-18)..." 
           autocomplete="off"
         />
         <ul id="suggestions" class="suggestions-list hidden"></ul>
@@ -56,22 +56,22 @@
 
       <div class="form-row">
         <select id="version-select">
-          <option value="KJV" selected>KJV (King James Version)</option>
-          <option value="NKJV">NKJV (New King James)</option>
-          <option value="NIV">NIV (New International)</option>
-          <option value="ESV">ESV (English Standard)</option>
-          <option value="NLT">NLT (New Living Translation)</option>
-          <option value="NASB">NASB (New American Standard)</option>
-          <option value="AMP">AMP (Amplified Bible)</option>
-          <option value="MSG">MSG (The Message)</option>
-          <option value="CSB">CSB (Christian Standard)</option>
-          <option value="WEB">WEB (World English Bible)</option>
-          <option value="ASV">ASV (American Standard)</option>
-          <option value="BBE">BBE (Basic English)</option>
-          <option value="DARBY">Darby</option>
-          <option value="YLT">Young's Literal Translation</option>
-          <option value="RSV">RSV (Revised Standard)</option>
-          <option value="NET">NET Bible</option>
+          <option value="kjv" selected>KJV (King James Version)</option>
+          <option value="nkjv">NKJV (New King James)</option>
+          <option value="niv">NIV (New International)</option>
+          <option value="niv2011">NIV 2011</option>
+          <option value="esv">ESV (English Standard)</option>
+          <option value="nlt">NLT (New Living Translation)</option>
+          <option value="nasb">NASB (New American Standard)</option>
+          <option value="amp">AMP (Amplified Bible)</option>
+          <option value="msg">MSG (The Message)</option>
+          <option value="csb17">CSB (Christian Standard)</option>
+          <option value="web">WEB (World English Bible)</option>
+          <option value="asv">ASV (American Standard)</option>
+          <option value="ylt">YLT (Young's Literal)</option>
+          <option value="net">NET Bible</option>
+          <option value="bsb">BSB (Berean Standard)</option>
+          <option value="rsv">RSV (Revised Standard)</option>
         </select>
         <button type="submit" id="fetch-btn">Fetch</button>
       </div>
@@ -145,8 +145,8 @@
         </div>
 
         <div class="setting-item full-width">
-          <label for="opacity-slider">Card Opacity: <span id="opacity-val">85%</span></label>
-          <input type="range" id="opacity-slider" min="0" max="100" value="85">
+          <label for="opacity-slider">Card Opacity: <span id="opacity-val">92%</span></label>
+          <input type="range" id="opacity-slider" min="0" max="100" value="92">
         </div>
 
         <div class="setting-item full-width">
