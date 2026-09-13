@@ -75,7 +75,7 @@ If hosted on **GitHub Pages**, no downloads or local servers are required!
 
 1. **Clone the Repository:**
 ```bash
-git clone [https://github.com/kapansa/obs-bible-dock.git](https://github.com/kapansa/obs-bible-dock.git)
+git clone https://github.com/kapansa/obs-bible-dock.git
 
 ```
 
