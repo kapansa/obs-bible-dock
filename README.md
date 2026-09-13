@@ -1,6 +1,8 @@
-# Minimalist OBS Bible Verse Dock & Overlay
+# 📖 Minimalist OBS Bible Verse Dock & Overlay Pro
 
-A lightweight, modern, and open-source custom Dock and Overlay system for displaying Bible verses live on OBS Studio. Built purely using **HTML, CSS, and Vanilla JavaScript** with zero dependencies or complex build steps.
+A modern, fast, and feature-rich open-source OBS Studio plugin for presenting Bible verses live on stream. Built using **pure HTML, CSS, and Vanilla JavaScript** with zero heavy dependencies or complex setup required. 
+
+Features auto-scaling text, dynamic book/chapter/verse dropdowns, instant quick-lookup chips, custom lower-third typography, background image support, and full offline caching.
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)
 ![OBS Studio](https://img.shields.io/badge/OBS%20Studio-Compatible-blue.svg)
@@ -9,12 +11,18 @@ A lightweight, modern, and open-source custom Dock and Overlay system for displa
 
 ## ✨ Features
 
-- **OBS Custom Dock Panel**: Control scripture display directly inside the OBS interface.
-- **Minimalist Design**: Clean, modern lower-third display with custom glassmorphism styling.
-- **Instant Search**: Fetch verses fast using standard scripture queries (e.g., `John 3:16`, `Psalm 23:1-4`).
-- **Multiple Translations**: Supports KJV, WEB, BBE, and more via free public API.
-- **Live Preview**: Inspect the scripture text inside the dock before projecting it live.
-- **Real-Time Synchronization**: Uses browser `BroadcastChannel` API for instant communication between Dock and Overlay.
+- **⚡ Quick Lookup Chips**: Single-click access to the 10 most preached books (*John, Romans, Psalms, Matthew, Genesis, Proverbs, Isaiah, Hebrews, Acts, Revelation*).
+- **🔍 Smart Search & Dynamic Dropdowns**: Auto-suggest book search with cascading Book ➔ Chapter ➔ Verse dropdown selectors.
+- **🔄 Stepper Navigation**: Seamless **Next Verse** and **Prev Verse** controls to step through chapters continuously during sermons.
+- **📐 Auto-Scaling Font Engine**: Intelligent font size adjustment guarantees long scriptures fit cleanly while keeping short verses prominent.
+- **🌐 50+ Bible Translations**: Full support for KJV, NKJV, NIV, ESV, NLT, NASB, AMP, MSG, CSB, WEB, ASV, BBE, and more.
+- **🎨 Deep Visual Customization**:
+  - **9 Typography Options**: Open Sans, Atkinson Hyperlegible (Low Vision accessibility), EB Garamond, Cinzel, Playfair Display, Lora, Cormorant Garamond, Crimson Text, and Inter.
+  - **Flexible Screen Positioning**: Top, Center, or Bottom (Lower-Third).
+  - **Dynamic Opacity Slider**: Full background opacity control from 0% (transparent) to 100% (solid).
+  - **Custom Background Image**: Upload any custom picture or graphic behind the verse container.
+  - **Smooth Animations**: Fade, Slide Up, or Instant display transitions.
+- **💾 Auto-Save & Offline Mode**: Settings and fetched verses are stored locally in browser memory (`localStorage`). Verses display instantly without requiring internet once cached.
 
 ---
 
@@ -22,14 +30,14 @@ A lightweight, modern, and open-source custom Dock and Overlay system for displa
 
 ```text
 obs-bible-dock/
-├── dock.html        # Custom Dock interface for OBS
-├── overlay.html     # Stream Browser Source overlay
+├── dock.html        # Custom Dock UI & Settings Controller for OBS
+├── overlay.html     # Stream Browser Source overlay UI
 ├── css/
-│   ├── dock.css     # Dock styling
-│   └── overlay.css  # Overlay design & animation
+│   ├── dock.css     # Dock control panel styles
+│   └── overlay.css  # Stream overlay typography & layout styles
 └── js/
-    ├── dock.js      # Logic for fetching & projecting verses
-    └── overlay.js   # Receiver logic for rendering verses
+    ├── dock.js      # App state, lookup engine, and setting controls
+    └── overlay.js   # Real-time event receiver & auto-scaling engine
 
 ```
 
@@ -37,44 +45,55 @@ obs-bible-dock/
 
 ## 🚀 Setup & Installation Guide
 
-### 1. Add the Overlay to OBS (Browser Source)
+### Option A: Hosted GitHub Pages Setup (Recommended — Fast & Automatic)
+
+If hosted on **GitHub Pages**, no downloads or local servers are required!
+
+#### 1. Add the Overlay Source
 
 1. Open **OBS Studio**.
-2. In your active Scene, click **+** under **Sources** and select **Browser**.
+2. Under **Sources**, click **+** and select **Browser**.
 3. Name it `Bible Overlay`.
-4. Check **Local File**.
-5. Click **Browse** and select `overlay.html` from your local project folder.
+4. Uncheck **Local File**.
+5. Set **URL** to:
+`https://<your-username>.github.io/obs-bible-dock/overlay.html`
 6. Set **Width**: `1920` and **Height**: `1080` (or match your canvas resolution).
 7. Click **OK**.
 
-### 2. Add the Control Panel Dock to OBS
+#### 2. Add the Control Dock Panel
 
-1. In OBS Studio, go to the top menu bar: **Docks** > **Custom Browser Docks...**
-2. Under **Dock Name**, type: `Bible Controller`.
-3. Under **URL**, enter the absolute file path to `dock.html`:
-* **Windows**: `file:///C:/path/to/obs-bible-dock/dock.html`
-* **macOS / Linux**: `file:///Users/username/path/to/obs-bible-dock/dock.html`
-
-
+1. In OBS Studio, go to the top bar menu: **Docks** > **Custom Browser Docks...**
+2. Set **Dock Name**: `Bible Controller`.
+3. Set **URL** to:
+`https://<your-username>.github.io/obs-bible-dock/dock.html`
 4. Click **Apply**.
-5. Drag and place the new Dock anywhere inside your OBS UI dock layout!
+5. Drag and position the newly created dock panel anywhere within your OBS workspace!
 
 ---
 
-## 📖 How to Use
+### Option B: Local File Setup
 
-1. Enter a scripture reference in the search input (e.g., `Genesis 1:1` or `Romans 8:28`).
-2. Select your desired translation from the dropdown menu.
-3. Click **Fetch** to preview the verse text inside the dock.
-4. Click **Project to Stream** to display the text on your live stream.
-5. Click **Clear Screen** to hide the overlay when finished.
+1. **Clone the Repository:**
+```bash
+git clone [https://github.com/your-username/obs-bible-dock.git](https://github.com/your-username/obs-bible-dock.git)
+
+```
+
+
+2. **Browser Source URL**: Set to your local file path (e.g., `file:///C:/path/to/obs-bible-dock/overlay.html`).
+3. **Custom Dock URL**: Set to your local file path (e.g., `file:///C:/path/to/obs-bible-dock/dock.html`).
 
 ---
 
-## ⚙️ Customization
+## 📖 Usage Guide
 
-* **Styling**: Modify `css/overlay.css` to change accent colors, typography, or background opacity.
-* **Positioning**: Adjust `align-items` or `padding` in `css/overlay.css` to re-position the overlay on screen.
+1. **Quick Select**: Click any of the Quick Book chips at the top of the dock panel.
+2. **Manual Lookup**: Type any scripture reference into the search field (e.g. `Romans 8:28` or `John 3:16`) and hit **Enter** or click **Fetch**.
+3. **Dropdown Navigation**: Select a book from the dropdown list to automatically populate the chapter and verse numbers.
+4. **Projecting Live**: Click **Project to Stream** to reveal the scripture graphic on stream.
+5. **Stepping Verses**: Click **Next Verse →** or **← Prev Verse** to sequentially step through consecutive verses.
+6. **Clearing Screen**: Click **Clear Screen** to hide the overlay graphic.
+7. **Customizing Display**: Open the **⚙️ Overlay Customization & Settings** panel inside the dock to tweak fonts, position, animations, and opacity in real-time.
 
 ---
 

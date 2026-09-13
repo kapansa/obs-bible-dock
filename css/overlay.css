@@ -1,61 +1,72 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
   background: transparent;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding: 40px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
+
+#overlay-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  padding: 40px;
+}
+
+/* Positions */
+.position-bottom { align-items: flex-end; justify-content: center; }
+.position-center { align-items: center; justify-content: center; }
+.position-top { align-items: flex-start; justify-content: center; }
 
 .verse-container {
-  max-width: 900px;
-  width: 100%;
-  background: rgba(15, 15, 20, 0.85);
-  backdrop-filter: blur(10px);
-  border-left: 4px solid #772ce8;
-  padding: 24px 30px;
-  border-radius: 8px;
+  /* Set width to cover 80% of the screen */
+  width: 80vw;
+  max-width: 80vw;
+  background-color: rgba(15, 15, 20, 0.85);
+  background-size: cover;
+  background-position: center;
+  border-left: 6px solid #8b5cf6;
+  padding: 32px 44px;
+  border-radius: 12px;
   color: #ffffff;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.65);
+  transition: all 0.4s ease;
 }
 
-.verse-container.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* Animation Styles */
+.anim-fade.hidden { opacity: 0; }
+.anim-fade.visible { opacity: 1; }
 
-.verse-container.hidden {
-  opacity: 0;
-  transform: translateY(20px);
-  pointer-events: none;
-}
+.anim-slide.hidden { opacity: 0; transform: translateY(40px); }
+.anim-slide.visible { opacity: 1; transform: translateY(0); }
+
+.anim-none.hidden { display: none; }
+.anim-none.visible { display: block; }
+
+/* Font Sizes */
+.size-small .verse-text { font-size: 20px; }
+.size-medium .verse-text { font-size: 28px; }
+.size-large .verse-text { font-size: 36px; }
+.size-xlarge .verse-text { font-size: 44px; }
+
+/* Auto-scaling override classes for extra-long verses */
+.scale-down-sm .verse-text { font-size: 24px !important; }
+.scale-down-xs .verse-text { font-size: 20px !important; }
 
 .verse-text {
-  font-size: 22px;
-  line-height: 1.5;
+  line-height: 1.55;
   font-weight: 400;
-  margin-bottom: 12px;
-  color: #f1f1f1;
+  margin-bottom: 14px;
+  color: #f4f4f5;
+  word-wrap: break-word;
 }
 
 .verse-reference {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
-  color: #a970ff;
+  color: #a78bfa;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.4px;
 }

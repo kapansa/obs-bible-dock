@@ -3,43 +3,93 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bible Verse Controller</title>
+  <title>Bible Verse Controller Pro</title>
   <link rel="stylesheet" href="css/dock.css">
 </head>
 <body>
   <div class="dock-container">
     <header class="dock-header">
-      <h2>Bible Verse Dock</h2>
+      <h2>Bible Verse Controller</h2>
     </header>
 
+    <!-- Quick Lookup Chips -->
+    <div class="quick-chips">
+      <span class="chips-label">Quick Books:</span>
+      <div class="chips-grid">
+        <button class="chip" data-book="John">John</button>
+        <button class="chip" data-book="Romans">Romans</button>
+        <button class="chip" data-book="Psalms">Psalms</button>
+        <button class="chip" data-book="Matthew">Matthew</button>
+        <button class="chip" data-book="Genesis">Genesis</button>
+        <button class="chip" data-book="Proverbs">Proverbs</button>
+        <button class="chip" data-book="Isaiah">Isaiah</button>
+        <button class="chip" data-book="Hebrews">Hebrews</button>
+        <button class="chip" data-book="Acts">Acts</button>
+        <button class="chip" data-book="Revelation">Revelation</button>
+      </div>
+    </div>
+
+    <!-- Search & Dropdown Section -->
     <form id="search-form" class="search-form">
-      <div class="form-group">
+      <div class="form-group relative">
         <input 
           type="text" 
           id="verse-input" 
-          placeholder="e.g. John 3:16 or Genesis 1:1-3" 
-          required 
+          placeholder="Type reference (e.g. John 3:16)..." 
           autocomplete="off"
         />
+        <ul id="suggestions" class="suggestions-list hidden"></ul>
+      </div>
+
+      <!-- Book, Chapter, Verse Dropdown Selectors -->
+      <div class="form-row dropdown-row">
+        <select id="book-select">
+          <option value="">Select Book...</option>
+        </select>
+        <select id="chapter-select" disabled>
+          <option value="">Ch</option>
+        </select>
+        <select id="verse-select" disabled>
+          <option value="">Vs</option>
+        </select>
       </div>
 
       <div class="form-row">
         <select id="version-select">
-          <option value="kjv" selected>KJV (King James)</option>
-          <option value="web">WEB (World English)</option>
-          <option value="bbe">BBE (Bible in Basic English)</option>
-          <option value="almeida">Almeida (Portuguese)</option>
+          <!-- 50+ Translations Populated Dynamically / via List -->
+          <option value="KJV" selected>KJV (King James Version)</option>
+          <option value="NKJV">NKJV (New King James)</option>
+          <option value="NIV">NIV (New International)</option>
+          <option value="ESV">ESV (English Standard)</option>
+          <option value="NLT">NLT (New Living Translation)</option>
+          <option value="NASB">NASB (New American Standard)</option>
+          <option value="AMP">AMP (Amplified Bible)</option>
+          <option value="MSG">MSG (The Message)</option>
+          <option value="CSB">CSB (Christian Standard)</option>
+          <option value="WEB">WEB (World English Bible)</option>
+          <option value="ASV">ASV (American Standard)</option>
+          <option value="BBE">BBE (Basic English)</option>
+          <option value="DARBY">Darby</option>
+          <option value="YLT">Young's Literal Translation</option>
+          <option value="RSV">RSV (Revised Standard)</option>
+          <option value="NET">NET Bible</option>
         </select>
         <button type="submit" id="fetch-btn">Fetch</button>
       </div>
     </form>
 
+    <!-- Preview & Stepper Card -->
     <div id="preview-card" class="preview-card hidden">
       <div class="preview-meta">
         <span id="preview-reference">John 3:16</span>
         <span id="preview-translation">KJV</span>
       </div>
       <p id="preview-text" class="preview-text">For God so loved the world...</p>
+
+      <div class="stepper-buttons">
+        <button id="prev-btn" class="btn btn-step">← Prev Verse</button>
+        <button id="next-btn" class="btn btn-step">Next Verse →</button>
+      </div>
       
       <div class="action-buttons">
         <button id="show-btn" class="btn btn-primary">Project to Stream</button>
@@ -47,7 +97,69 @@
       </div>
     </div>
 
-    <div id="status-message" class="status-message"></div>
+    <!-- Collapsible Settings Panel -->
+    <details class="settings-panel">
+      <summary>⚙️ Overlay Customization & Settings</summary>
+      <div class="settings-grid">
+        
+        <div class="setting-item">
+          <label for="font-family">Font Family:</label>
+          <select id="font-family">
+            <option value="Open Sans">Open Sans (Default)</option>
+            <option value="Atkinson Hyperlegible">Atkinson Hyperlegible (Low Vision)</option>
+            <option value="EB Garamond">EB Garamond</option>
+            <option value="Cinzel">Cinzel</option>
+            <option value="Playfair Display">Playfair Display</option>
+            <option value="Lora">Lora</option>
+            <option value="Cormorant Garamond">Cormorant Garamond</option>
+            <option value="Crimson Text">Crimson Text</option>
+            <option value="Inter">Inter</option>
+          </select>
+        </div>
+
+        <div class="setting-item">
+          <label for="font-size">Font Base Size:</label>
+          <select id="font-size">
+            <option value="small">Small</option>
+            <option value="medium" selected>Medium</option>
+            <option value="large">Large</option>
+            <option value="xlarge">X-Large</option>
+          </select>
+        </div>
+
+        <div class="setting-item">
+          <label for="position-select">Screen Position:</label>
+          <select id="position-select">
+            <option value="bottom" selected>Bottom (Lower Third)</option>
+            <option value="center">Center</option>
+            <option value="top">Top</option>
+          </select>
+        </div>
+
+        <div class="setting-item">
+          <label for="animation-select">Animation Style:</label>
+          <select id="animation-select">
+            <option value="fade" selected>Fade</option>
+            <option value="slide">Slide Up</option>
+            <option value="none">None</option>
+          </select>
+        </div>
+
+        <div class="setting-item full-width">
+          <label for="opacity-slider">Card Opacity: <span id="opacity-val">85%</span></label>
+          <input type="range" id="opacity-slider" min="0" max="100" value="85">
+        </div>
+
+        <div class="setting-item full-width">
+          <label for="bg-upload">Background Image (Optional):</label>
+          <input type="file" id="bg-upload" accept="image/*">
+          <button type="button" id="clear-bg-btn" class="btn-xs">Remove Image</button>
+        </div>
+
+      </div>
+    </details>
+
+    <div id="status-message" class="status-message">Ready</div>
   </div>
 
   <script src="js/dock.js"></script>
