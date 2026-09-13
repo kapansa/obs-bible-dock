@@ -45,9 +45,9 @@ obs-bible-dock/
 
 ## 🚀 Setup & Installation Guide
 
-### Option A: Hosted GitHub Pages Setup (Recommended — Fast & Automatic)
+### Option A: Hosted (Recommended — Fast & Automatic)
 
-If hosted on **GitHub Pages**, no downloads or local servers are required!
+If hosted on **Netlify**, no downloads or local servers are required!
 
 #### 1. Add the Overlay Source
 
