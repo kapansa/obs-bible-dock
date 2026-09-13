@@ -16,21 +16,21 @@
     <div class="quick-chips">
       <span class="chips-label">Quick Books:</span>
       <div class="chips-grid">
-        <button class="chip" data-book="John">John</button>
-        <button class="chip" data-book="Romans">Romans</button>
-        <button class="chip" data-book="Psalms">Psalms</button>
-        <button class="chip" data-book="Matthew">Matthew</button>
-        <button class="chip" data-book="Genesis">Genesis</button>
-        <button class="chip" data-book="Proverbs">Proverbs</button>
-        <button class="chip" data-book="Isaiah">Isaiah</button>
-        <button class="chip" data-book="Hebrews">Hebrews</button>
-        <button class="chip" data-book="Acts">Acts</button>
-        <button class="chip" data-book="Revelation">Revelation</button>
+        <button type="button" class="chip" data-book="John">John</button>
+        <button type="button" class="chip" data-book="Romans">Romans</button>
+        <button type="button" class="chip" data-book="Psalms">Psalms</button>
+        <button type="button" class="chip" data-book="Matthew">Matthew</button>
+        <button type="button" class="chip" data-book="Genesis">Genesis</button>
+        <button type="button" class="chip" data-book="Proverbs">Proverbs</button>
+        <button type="button" class="chip" data-book="Isaiah">Isaiah</button>
+        <button type="button" class="chip" data-book="Hebrews">Hebrews</button>
+        <button type="button" class="chip" data-book="Acts">Acts</button>
+        <button type="button" class="chip" data-book="Revelation">Revelation</button>
       </div>
     </div>
 
     <!-- Search & Dropdown Section -->
-    <form id="search-form" class="search-form">
+    <form id="search-form" class="search-form" onsubmit="return false;">
       <div class="form-group relative">
         <input 
           type="text" 
@@ -73,7 +73,7 @@
           <option value="bsb">BSB (Berean Standard)</option>
           <option value="rsv">RSV (Revised Standard)</option>
         </select>
-        <button type="submit" id="fetch-btn">Fetch</button>
+        <button type="button" id="fetch-btn">Fetch</button>
       </div>
     </form>
 
@@ -86,13 +86,13 @@
       <p id="preview-text" class="preview-text">For God so loved the world...</p>
 
       <div class="stepper-buttons">
-        <button id="prev-btn" class="btn btn-step">← Prev Verse</button>
-        <button id="next-btn" class="btn btn-step">Next Verse →</button>
+        <button type="button" id="prev-btn" class="btn btn-step">← Prev Verse</button>
+        <button type="button" id="next-btn" class="btn btn-step">Next Verse →</button>
       </div>
       
       <div class="action-buttons">
-        <button id="show-btn" class="btn btn-primary">Project to Stream</button>
-        <button id="hide-btn" class="btn btn-danger">Clear Screen</button>
+        <button type="button" id="show-btn" class="btn btn-primary">Project to Stream</button>
+        <button type="button" id="hide-btn" class="btn btn-danger">Clear Screen</button>
       </div>
     </div>
 

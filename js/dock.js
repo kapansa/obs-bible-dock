@@ -45,6 +45,7 @@ const bookSelect = document.getElementById('book-select');
 const chapterSelect = document.getElementById('chapter-select');
 const verseSelect = document.getElementById('verse-select');
 const versionSelect = document.getElementById('version-select');
+const fetchBtn = document.getElementById('fetch-btn');
 const suggestions = document.getElementById('suggestions');
 
 const previewCard = document.getElementById('preview-card');
@@ -107,12 +108,13 @@ verseInput.addEventListener('input', () => {
 
 // Quick Chips Handler
 document.querySelectorAll('.chip').forEach(chip => {
-  chip.addEventListener('click', () => {
+  chip.addEventListener('click', (e) => {
+    e.preventDefault();
     const book = chip.getAttribute('data-book');
     bookSelect.value = book;
     populateChapters(book);
     verseInput.value = `${book} 1:1`;
-    fetchVerse(`${book} 1:1`, versionSelect.value);
+    handleFetch();
   });
 });
 
@@ -128,7 +130,7 @@ chapterSelect.addEventListener('change', () => {
 verseSelect.addEventListener('change', () => {
   const query = `${bookSelect.value} ${chapterSelect.value}:${verseSelect.value}`;
   verseInput.value = query;
-  fetchVerse(query, versionSelect.value);
+  handleFetch();
 });
 
 function populateChapters(bookName) {
@@ -162,12 +164,12 @@ function populateVerses(count) {
 function buildDisplayText(raw) {
   if (!raw) return '';
   return raw
-    .replace(/<sup[^>]*>[\s\S]*?<\/sup>/gi, '') // Strip footnotes
-    .replace(/<S>\d+<\/S>/g, '')                 // Strip Strong's numbers
-    .replace(/<[^>]+>/g, '')                      // Strip all HTML tags
-    .replace(/\n\d+\s*/g, ' ')                   // Strip verse numbers
-    .replace(/\s+([.,;:!?])/g, '$1')             // Fix spacing around punctuation
-    .replace(/\s+/g, ' ')                        // Collapse whitespace
+    .replace(/<sup[^>]*>[\s\S]*?<\/sup>/gi, '') 
+    .replace(/<S>\d+<\/S>/g, '')                 
+    .replace(/<[^>]+>/g, '')                      
+    .replace(/\n\d+\s*/g, ' ')                   
+    .replace(/\s+([.,;:!?])/g, '$1')             
+    .replace(/\s+/g, ' ')                        
     .trim();
 }
 
@@ -182,6 +184,27 @@ function parseReference(str) {
     endVerse: m[4] ? parseInt(m[4], 10) : null
   };
 }
+
+// Centralized Fetch Trigger
+function handleFetch() {
+  const query = verseInput.value.trim();
+  if (query) {
+    fetchVerse(query, versionSelect.value);
+  }
+}
+
+// Intercept form submission to prevent OBS dock page reloads
+searchForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  handleFetch();
+  return false;
+});
+
+fetchBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  handleFetch();
+});
 
 // Strict Bolls.life Fetch Function
 async function fetchVerse(reference, translationKey) {
@@ -198,7 +221,7 @@ async function fetchVerse(reference, translationKey) {
 
   const parsed = parseReference(reference);
   if (!parsed) {
-    statusMessage.textContent = 'Invalid reference format. Try "John 3:16" or "John 3:16-18".';
+    statusMessage.textContent = 'Invalid format. Try "John 3:16" or "John 3:16-18".';
     previewCard.classList.add('hidden');
     return;
   }
@@ -281,7 +304,8 @@ function parseStepper(ref) {
 }
 
 // Stepper Navigation
-nextBtn.addEventListener('click', () => {
+nextBtn.addEventListener('click', (e) => {
+  e.preventDefault();
   if (!currentBook) return;
   currentVerseNum++;
   const query = `${currentBook} ${currentChapter}:${currentVerseNum}`;
@@ -289,7 +313,8 @@ nextBtn.addEventListener('click', () => {
   fetchVerse(query, versionSelect.value);
 });
 
-prevBtn.addEventListener('click', () => {
+prevBtn.addEventListener('click', (e) => {
+  e.preventDefault();
   if (!currentBook || currentVerseNum <= 1) return;
   currentVerseNum--;
   const query = `${currentBook} ${currentChapter}:${currentVerseNum}`;
@@ -298,13 +323,15 @@ prevBtn.addEventListener('click', () => {
 });
 
 // Broadcast Event Dispatcher
-showBtn.addEventListener('click', () => {
+showBtn.addEventListener('click', (e) => {
+  e.preventDefault();
   if (!currentVerseData) return;
   dispatch({ action: 'SHOW', data: currentVerseData });
   statusMessage.textContent = 'Projected to stream!';
 });
 
-hideBtn.addEventListener('click', () => {
+hideBtn.addEventListener('click', (e) => {
+  e.preventDefault();
   dispatch({ action: 'HIDE' });
   statusMessage.textContent = 'Cleared from stream.';
 });
@@ -382,7 +409,8 @@ bgUpload.addEventListener('change', (e) => {
   reader.readAsDataURL(file);
 });
 
-clearBgBtn.addEventListener('click', () => {
+clearBgBtn.addEventListener('click', (e) => {
+  e.preventDefault();
   localStorage.removeItem('obs_bible_bg_img');
   bgUpload.value = '';
   saveAndSyncSettings();
