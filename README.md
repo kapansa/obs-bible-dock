@@ -57,7 +57,6 @@ No downloads or local file installations are required. Copy the URLs below direc
 
 ```text
 https://kapansa.github.io/obs-bible-dock/overlay.html
-
 ```
 
 6. Set **Width**: `1920` and **Height**: `1080` (or match your canvas resolution).
@@ -71,7 +70,6 @@ https://kapansa.github.io/obs-bible-dock/overlay.html
 
 ```text
 https://kapansa.github.io/obs-bible-dock/dock.html
-
 ```
 
 4. Click **Apply**.
