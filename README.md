@@ -11,18 +11,18 @@ Features auto-scaling text, dynamic book/chapter/verse dropdowns, instant quick-
 
 ## ✨ Features
 
-- **⚡ Quick Lookup Chips**: Single-click access to the 10 most preached books (*John, Romans, Psalms, Matthew, Genesis, Proverbs, Isaiah, Hebrews, Acts, Revelation*).
-- **🔍 Smart Search & Dynamic Dropdowns**: Auto-suggest book search with cascading Book ➔ Chapter ➔ Verse dropdown selectors.
-- **🔄 Stepper Navigation**: Seamless **Next Verse** and **Prev Verse** controls to step through chapters continuously during sermons.
-- **📐 Auto-Scaling Font Engine**: Intelligent font size adjustment guarantees long scriptures fit cleanly while keeping short verses prominent.
-- **🌐 50+ Bible Translations**: Full support for KJV, NKJV, NIV, ESV, NLT, NASB, AMP, MSG, CSB, WEB, ASV, BBE, and more.
-- **🎨 Deep Visual Customization**:
+- **Quick Lookup Chips**: Single-click access to the 10 most preached books (*John, Romans, Psalms, Matthew, Genesis, Proverbs, Isaiah, Hebrews, Acts, Revelation*).
+- **Smart Search & Dynamic Dropdowns**: Auto-suggest book search with cascading Book ➔ Chapter ➔ Verse dropdown selectors.
+- **Stepper Navigation**: Seamless **Next Verse** and **Prev Verse** controls to step through chapters continuously during sermons.
+- **Auto-Scaling Font Engine**: Intelligent font size adjustment guarantees long scriptures fit cleanly while keeping short verses prominent.
+- **50+ Bible Translations**: Full support for KJV, NKJV, NIV, ESV, NLT, NASB, AMP, MSG, CSB, WEB, ASV, BBE, and more.
+- **Deep Visual Customization**:
   - **9 Typography Options**: Open Sans, Atkinson Hyperlegible (Low Vision accessibility), EB Garamond, Cinzel, Playfair Display, Lora, Cormorant Garamond, Crimson Text, and Inter.
   - **Flexible Screen Positioning**: Top, Center, or Bottom (Lower-Third).
   - **Dynamic Opacity Slider**: Full background opacity control from 0% (transparent) to 100% (solid).
   - **Custom Background Image**: Upload any custom picture or graphic behind the verse container.
   - **Smooth Animations**: Fade, Slide Up, or Instant display transitions.
-- **💾 Auto-Save & Offline Mode**: Settings and fetched verses are stored locally in browser memory (`localStorage`). Verses display instantly without requiring internet once cached.
+- **Auto-Save & Offline Mode**: Settings and fetched verses are stored locally in browser memory (`localStorage`). Verses display instantly without requiring internet once cached.
 
 ---
 
