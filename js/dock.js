@@ -240,21 +240,58 @@ function saveAndSyncSettings() {
   el.addEventListener('input', saveAndSyncSettings);
 });
 
-// Image Upload Handler
+// Image Upload Handler (With Auto-Compression to prevent localStorage quota errors)
 bgUpload.addEventListener('change', (e) => {
   const file = e.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function(evt) {
-      localStorage.setItem('obs_bible_bg_img', evt.target.result);
-      saveAndSyncSettings();
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    const img = new Image();
+    img.onload = function() {
+      // Resize large images to max 1280px width/height
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const MAX_SIZE = 1280;
+      
+      let width = img.width;
+      let height = img.height;
+
+      if (width > height) {
+        if (width > MAX_SIZE) {
+          height *= MAX_SIZE / width;
+          width = MAX_SIZE;
+        }
+      } else {
+        if (height > MAX_SIZE) {
+          width *= MAX_SIZE / height;
+          height = MAX_SIZE;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // Convert to compressed JPEG data URL
+      const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+      try {
+        localStorage.setItem('obs_bible_bg_img', compressedDataUrl);
+        saveAndSyncSettings();
+        statusMessage.textContent = 'Background image updated!';
+      } catch (err) {
+        statusMessage.textContent = 'Image size too large for browser memory.';
+      }
     };
-    reader.readAsDataURL(file);
-  }
+    img.src = evt.target.result;
+  };
+  reader.readAsDataURL(file);
 });
 
 clearBgBtn.addEventListener('click', () => {
   localStorage.removeItem('obs_bible_bg_img');
   bgUpload.value = '';
   saveAndSyncSettings();
+  statusMessage.textContent = 'Background image removed.';
 });

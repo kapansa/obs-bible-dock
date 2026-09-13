@@ -7,10 +7,18 @@ function handleVerseEvent(eventData) {
   if (!eventData) return;
 
   if (eventData.action === 'SHOW' && eventData.data) {
-    verseText.textContent = `"${eventData.data.text}"`;
-    verseReference.textContent = `${eventData.data.reference} (${eventData.data.translation})`;
+    // Render scripture quote body
+    verseText.innerHTML = `<span class="quote-mark">“</span>${eventData.data.text}<span class="quote-mark">”</span>`;
+    
+    // Render enlarged scripture title and new gold metallic version badge
+    verseReference.innerHTML = `
+      <div class="ref-title">
+        <span>${eventData.data.reference}</span>
+      </div>
+      <span class="translation-badge">${eventData.data.translation}</span>
+    `;
 
-    // Adjusted auto-scaling character limits for the wider 80vw layout
+    // Auto-scaling character limits for 80vw layout
     const len = eventData.data.text.length;
     verseContainer.classList.remove('scale-down-sm', 'scale-down-xs');
     if (len > 400) {
@@ -54,12 +62,12 @@ function applySettings(s) {
   }
 
   // Opacity & Background Image
-  const opacityVal = s.opacity !== undefined ? s.opacity / 100 : 0.85;
+  const opacityVal = s.opacity !== undefined ? s.opacity / 100 : 0.92;
   if (s.bgImage) {
-    verseContainer.style.backgroundImage = `linear-gradient(rgba(15, 15, 20, ${opacityVal}), rgba(15, 15, 20, ${opacityVal})), url(${s.bgImage})`;
+    verseContainer.style.backgroundImage = `linear-gradient(rgba(10, 10, 14, ${opacityVal}), rgba(10, 10, 14, ${opacityVal})), url(${s.bgImage})`;
   } else {
     verseContainer.style.backgroundImage = 'none';
-    verseContainer.style.backgroundColor = `rgba(15, 15, 20, ${opacityVal})`;
+    verseContainer.style.backgroundColor = `rgba(10, 10, 14, ${opacityVal})`;
   }
 }
 
