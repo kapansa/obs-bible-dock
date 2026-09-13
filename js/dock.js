@@ -124,7 +124,7 @@ function populateVerses(count) {
   }
 }
 
-// Fetch Verse Logic (with Offline Cache)
+// Fetch Verse Logic (with Multi-API Fallback & Offline Cache)
 searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const query = verseInput.value.trim();
@@ -144,23 +144,46 @@ async function fetchVerse(query, translation) {
   }
 
   try {
-    const res = await fetch(`https://bible-api.com/${encodeURIComponent(query)}?translation=${translation}`);
-    if (!res.ok) throw new Error('Verse not found');
-    const data = await res.json();
-    
+    // 1. First attempt fetching via bolls.life API (Supports NIV, ESV, NKJV, NLT, etc.)
+    const bollsUrl = `https://bolls.life/get-verse/${translation.toUpperCase()}/${encodeURIComponent(query)}/`;
+    let response = await fetch(bollsUrl);
+
+    if (response.ok) {
+      const data = await response.json();
+      const formatted = {
+        reference: `${data.book_name} ${data.chapter}:${data.verse}`,
+        text: data.text.replace(/<[^>]*>/g, '').trim(), // Remove inline HTML tags if present
+        translation: translation.toUpperCase()
+      };
+      
+      localStorage.setItem(cacheKey, JSON.stringify(formatted));
+      renderVerse(formatted);
+      statusMessage.textContent = 'Verse ready.';
+      return;
+    }
+
+    // 2. Fallback to bible-api.com if bolls.life query format differs
+    const fallbackUrl = `https://bible-api.com/${encodeURIComponent(query)}?translation=${translation.toLowerCase()}`;
+    response = await fetch(fallbackUrl);
+
+    if (!response.ok) {
+      throw new Error('Verse not found');
+    }
+
+    const data = await response.json();
     const formatted = {
       reference: data.reference,
       text: data.text.trim(),
-      translation: translation.toUpperCase(),
-      verses: data.verses || []
+      translation: translation.toUpperCase()
     };
 
-    // Save to Cache
     localStorage.setItem(cacheKey, JSON.stringify(formatted));
     renderVerse(formatted);
     statusMessage.textContent = 'Verse ready.';
+
   } catch (err) {
-    statusMessage.textContent = 'Error: Could not find verse.';
+    statusMessage.textContent = `Error: Could not find verse in ${translation}. Check reference format.`;
+    previewCard.classList.add('hidden');
   }
 }
 
