@@ -56,7 +56,7 @@ If hosted on **GitHub Pages**, no downloads or local servers are required!
 3. Name it `Bible Overlay`.
 4. Uncheck **Local File**.
 5. Set **URL** to:
-`https://kapansa.github.io/obs-bible-dock/overlay.html`
+`https://kapansa-obs-bible-dock.netlify.app/overlay.html`
 6. Set **Width**: `1920` and **Height**: `1080` (or match your canvas resolution).
 7. Click **OK**.
 
@@ -65,7 +65,7 @@ If hosted on **GitHub Pages**, no downloads or local servers are required!
 1. In OBS Studio, go to the top bar menu: **Docks** > **Custom Browser Docks...**
 2. Set **Dock Name**: `Bible Controller`.
 3. Set **URL** to:
-`https://kapansa.github.io/obs-bible-dock/dock.html`
+`https://kapansa-obs-bible-dock.netlify.app/dock.html`
 4. Click **Apply**.
 5. Drag and position the newly created dock panel anywhere within your OBS workspace!
 
