@@ -56,7 +56,7 @@ No downloads or local file installations are required. Copy the URLs below direc
 5. Set **URL** to:
 
 ```text
-[https://kapansa.github.io/obs-bible-dock/overlay.html](https://kapansa.github.io/obs-bible-dock/overlay.html)
+https://kapansa.github.io/obs-bible-dock/overlay.html
 
 ```
 
@@ -70,7 +70,7 @@ No downloads or local file installations are required. Copy the URLs below direc
 3. Set **URL** to:
 
 ```text
-[https://kapansa.github.io/obs-bible-dock/dock.html](https://kapansa.github.io/obs-bible-dock/dock.html)
+https://kapansa.github.io/obs-bible-dock/dock.html
 
 ```
 
