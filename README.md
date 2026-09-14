@@ -11,18 +11,18 @@ Features auto-scaling text, dynamic book/chapter/verse dropdowns, instant quick-
 
 ## ✨ Features
 
-- **⚡ Quick Lookup Chips**: Single-click access to the 10 most preached books (*John, Romans, Psalms, Matthew, Genesis, Proverbs, Isaiah, Hebrews, Acts, Revelation*).
-- **🔍 Smart Search & Dynamic Dropdowns**: Auto-suggest book search with cascading Book ➔ Chapter ➔ Verse dropdown selectors.
-- **🔄 Stepper Navigation**: Seamless **Next Verse** and **Prev Verse** controls to step through chapters continuously during sermons.
-- **📐 Auto-Scaling Font Engine**: Intelligent font size adjustment guarantees long scriptures fit cleanly while keeping short verses prominent.
-- **🌐 50+ Bible Translations**: Full support for KJV, NKJV, NIV, ESV, NLT, NASB, AMP, MSG, CSB, WEB, ASV, BBE, and more.
-- **🎨 Deep Visual Customization**:
+- **Quick Lookup Chips**: Single-click access to the 10 most preached books (*John, Romans, Psalms, Matthew, Genesis, Proverbs, Isaiah, Hebrews, Acts, Revelation*).
+- **Smart Search & Dynamic Dropdowns**: Auto-suggest book search with cascading Book ➔ Chapter ➔ Verse dropdown selectors.
+- **Stepper Navigation**: Seamless **Next Verse** and **Prev Verse** controls to step through chapters continuously during sermons, with an optional **Auto-Project** toggle to project live instantly without extra clicks.
+- **Auto-Scaling Font Engine**: Intelligent font size adjustment guarantees long scriptures fit cleanly while keeping short verses prominent.
+- **50+ Bible Translations**: Full support for KJV, NKJV, NIV, ESV, NLT, NASB, AMP, MSG, CSB, WEB, ASV, BBE, and more via Bolls.life API.
+- **Deep Visual Customization**:
   - **9 Typography Options**: Open Sans, Atkinson Hyperlegible (Low Vision accessibility), EB Garamond, Cinzel, Playfair Display, Lora, Cormorant Garamond, Crimson Text, and Inter.
   - **Flexible Screen Positioning**: Top, Center, or Bottom (Lower-Third).
   - **Dynamic Opacity Slider**: Full background opacity control from 0% (transparent) to 100% (solid).
   - **Custom Background Image**: Use the default background image provided in the repository's `assets/` folder, or upload any custom picture/graphic behind the verse container.
   - **Smooth Animations**: Fade, Slide Up, or Instant display transitions.
-- **💾 Auto-Save & Offline Mode**: Settings and fetched verses are stored locally in browser memory (`localStorage`). Verses display instantly without requiring internet once cached.
+- **Auto-Save & Offline Mode**: Settings and fetched verses are stored locally in browser memory (`localStorage`). Verses display instantly without requiring internet once cached.
 
 ---
 
@@ -82,12 +82,12 @@ https://kapansa.github.io/obs-bible-dock/dock.html
 ## 📖 Usage Guide
 
 1. **Quick Select**: Click any of the Quick Book chips at the top of the dock panel.
-2. **Manual Lookup**: Type any scripture reference into the search field (e.g. `Romans 8:28` or `John 3:16`) and hit **Enter** or click **Fetch**.
+2. **Manual Lookup**: Type any scripture reference into the search field (e.g. `Romans 8:28` or `John 3:16` or `John 3:16-18`) and hit **Enter** or click **Fetch**.
 3. **Dropdown Navigation**: Select a book from the dropdown list to automatically populate the chapter and verse numbers.
 4. **Projecting Live**: Click **Project to Stream** to reveal the scripture graphic on stream.
-5. **Stepping Verses**: Click **Next Verse →** or **← Prev Verse** to sequentially step through consecutive verses.
+5. **Stepping Verses**: Click **Next Verse →** or **← Prev Verse** to sequentially step through consecutive verses. (Tip: Enable the **Auto-project** checkbox in the settings panel to project consecutive verses live automatically without clicking project every time).
 6. **Clearing Screen**: Click **Clear Screen** to hide the overlay graphic.
-7. **Customizing Display**: Open the **⚙️ Overlay Customization & Settings** panel inside the dock to tweak fonts, position, animations, opacity, or upload/change background images in real-time. You can use the default background image included in the repository's `assets/` folder, or upload your own custom design.
+7. **Customizing Display**: Open the **⚙️ Overlay Customization & Settings** panel inside the dock to tweak fonts, position, animations, opacity, auto-project behavior, or upload/change background images in real-time. You can use the default background image included in the repository's `assets/` folder, or upload your own custom design.
 
 ---
 

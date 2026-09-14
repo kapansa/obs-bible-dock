@@ -65,6 +65,7 @@ const positionSelect = document.getElementById('position-select');
 const animationSelect = document.getElementById('animation-select');
 const opacitySlider = document.getElementById('opacity-slider');
 const opacityVal = document.getElementById('opacity-val');
+const autoProjectCheckbox = document.getElementById('auto-project-checkbox');
 const bgUpload = document.getElementById('bg-upload');
 const clearBgBtn = document.getElementById('clear-bg-btn');
 
@@ -186,36 +187,41 @@ function parseReference(str) {
 }
 
 // Centralized Fetch Trigger
-function handleFetch() {
+function handleFetch(isNavigation = false) {
   const query = verseInput.value.trim();
   if (query) {
-    fetchVerse(query, versionSelect.value);
+    fetchVerse(query, versionSelect.value, isNavigation);
   }
 }
 
-// Intercept form submission to prevent OBS dock page reloads
+// Intercept form submission to prevent page reloads
 searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
   e.stopPropagation();
-  handleFetch();
+  handleFetch(false);
   return false;
 });
 
 fetchBtn.addEventListener('click', (e) => {
   e.preventDefault();
-  handleFetch();
+  handleFetch(false);
 });
 
 // Strict Bolls.life Fetch Function
-async function fetchVerse(reference, translationKey) {
+async function fetchVerse(reference, translationKey, isNavigation = false) {
   statusMessage.textContent = `Fetching ${reference}...`;
   const cacheKey = `verse_cache_${reference}_${translationKey}`.toLowerCase();
 
   // Check Offline Cache
   const cached = localStorage.getItem(cacheKey);
   if (cached) {
-    renderVerse(JSON.parse(cached));
+    const parsedCache = JSON.parse(cached);
+    renderVerse(parsedCache);
     statusMessage.textContent = 'Loaded from offline cache.';
+    if (isNavigation && autoProjectCheckbox.checked) {
+      dispatch({ action: 'SHOW', data: parsedCache });
+      statusMessage.textContent = 'Navigated & projected live!';
+    }
     return;
   }
 
@@ -278,6 +284,12 @@ async function fetchVerse(reference, translationKey) {
     renderVerse(formatted);
     statusMessage.textContent = 'Verse ready.';
 
+    // Auto-project if toggled on
+    if (isNavigation && autoProjectCheckbox.checked) {
+      dispatch({ action: 'SHOW', data: formatted });
+      statusMessage.textContent = 'Navigated & projected live!';
+    }
+
   } catch (err) {
     statusMessage.textContent = `Error: Could not find "${reference}" in ${translationCode}.`;
     previewCard.classList.add('hidden');
@@ -303,14 +315,14 @@ function parseStepper(ref) {
   }
 }
 
-// Stepper Navigation
+// Stepper Navigation (Passing true for isNavigation)
 nextBtn.addEventListener('click', (e) => {
   e.preventDefault();
   if (!currentBook) return;
   currentVerseNum++;
   const query = `${currentBook} ${currentChapter}:${currentVerseNum}`;
   verseInput.value = query;
-  fetchVerse(query, versionSelect.value);
+  fetchVerse(query, versionSelect.value, true);
 });
 
 prevBtn.addEventListener('click', (e) => {
@@ -319,7 +331,7 @@ prevBtn.addEventListener('click', (e) => {
   currentVerseNum--;
   const query = `${currentBook} ${currentChapter}:${currentVerseNum}`;
   verseInput.value = query;
-  fetchVerse(query, versionSelect.value);
+  fetchVerse(query, versionSelect.value, true);
 });
 
 // Broadcast Event Dispatcher
@@ -349,6 +361,7 @@ function saveAndSyncSettings() {
     position: positionSelect.value,
     animation: animationSelect.value,
     opacity: opacitySlider.value,
+    autoProject: autoProjectCheckbox.checked,
     bgImage: localStorage.getItem('obs_bible_bg_img') || ''
   };
 
@@ -357,9 +370,30 @@ function saveAndSyncSettings() {
   dispatch({ action: 'UPDATE_SETTINGS', settings });
 }
 
-[fontFamilySelect, fontSizeSelect, positionSelect, animationSelect, opacitySlider].forEach(el => {
+[fontFamilySelect, fontSizeSelect, positionSelect, animationSelect, opacitySlider, autoProjectCheckbox].forEach(el => {
   el.addEventListener('change', saveAndSyncSettings);
   el.addEventListener('input', saveAndSyncSettings);
+});
+
+// Load saved settings on start
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('obs_bible_settings');
+  if (saved) {
+    try {
+      const s = JSON.parse(saved);
+      if (s.fontFamily) fontFamilySelect.value = s.fontFamily;
+      if (s.fontSize) fontSizeSelect.value = s.fontSize;
+      if (s.position) positionSelect.value = s.position;
+      if (s.animation) animationSelect.value = s.animation;
+      if (s.opacity !== undefined) {
+        opacitySlider.value = s.opacity;
+        opacityVal.textContent = `${s.opacity}%`;
+      }
+      if (s.autoProject !== undefined) {
+        autoProjectCheckbox.checked = s.autoProject;
+      }
+    } catch (_) {}
+  }
 });
 
 // Compressed Image Upload Handler
