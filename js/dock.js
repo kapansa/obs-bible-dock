@@ -48,6 +48,11 @@ const versionSelect = document.getElementById('version-select');
 const fetchBtn = document.getElementById('fetch-btn');
 const suggestions = document.getElementById('suggestions');
 
+// Keyword Search DOM Elements
+const keywordInput = document.getElementById('keyword-input');
+const keywordSearchBtn = document.getElementById('keyword-search-btn');
+const keywordResults = document.getElementById('keyword-results');
+
 const previewCard = document.getElementById('preview-card');
 const previewReference = document.getElementById('preview-reference');
 const previewTranslation = document.getElementById('preview-translation');
@@ -65,6 +70,12 @@ const positionSelect = document.getElementById('position-select');
 const animationSelect = document.getElementById('animation-select');
 const opacitySlider = document.getElementById('opacity-slider');
 const opacityVal = document.getElementById('opacity-val');
+
+const cardWidthSlider = document.getElementById('card-width');
+const valWidth = document.getElementById('val-width');
+const marginBottomSlider = document.getElementById('margin-bottom');
+const valBottom = document.getElementById('val-bottom');
+
 const autoProjectCheckbox = document.getElementById('auto-project-checkbox');
 const bgUpload = document.getElementById('bg-upload');
 const clearBgBtn = document.getElementById('clear-bg-btn');
@@ -161,7 +172,6 @@ function populateVerses(count) {
   }
 }
 
-// Clean HTML & Strong's numbers from Bolls API text
 function buildDisplayText(raw) {
   if (!raw) return '';
   return raw
@@ -174,7 +184,6 @@ function buildDisplayText(raw) {
     .trim();
 }
 
-// Parse "John 3:16" or "John 3:16-18" into structured object
 function parseReference(str) {
   const m = str.trim().match(/^(.+?)\s+(\d+):(\d+)(?:-(\d+))?$/);
   if (!m) return null;
@@ -186,7 +195,6 @@ function parseReference(str) {
   };
 }
 
-// Centralized Fetch Trigger
 function handleFetch(isNavigation = false) {
   const query = verseInput.value.trim();
   if (query) {
@@ -194,7 +202,6 @@ function handleFetch(isNavigation = false) {
   }
 }
 
-// Intercept form submission to prevent page reloads
 searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
   e.stopPropagation();
@@ -207,12 +214,76 @@ fetchBtn.addEventListener('click', (e) => {
   handleFetch(false);
 });
 
-// Strict Bolls.life Fetch Function
+// Keyword Search Logic
+keywordSearchBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  performKeywordSearch();
+});
+
+keywordInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    performKeywordSearch();
+  }
+});
+
+async function performKeywordSearch() {
+  const query = keywordInput.value.trim();
+  if (!query) return;
+
+  statusMessage.textContent = `Searching for "${query}"...`;
+  keywordResults.innerHTML = '';
+  keywordResults.classList.add('hidden');
+
+  const translationKey = versionSelect.value;
+  const translationCode = TRANSLATION_MAP[translationKey.toLowerCase()] || translationKey.toUpperCase();
+
+  try {
+    const url = `${API_BASE}/search/${translationCode}/${encodeURIComponent(query)}/`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Search failed');
+
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) {
+      statusMessage.textContent = `No results found for "${query}".`;
+      return;
+    }
+
+    statusMessage.textContent = `Found ${data.length} results.`;
+    keywordResults.classList.remove('hidden');
+
+    // Display top 30 search results in dropdown list
+    data.slice(0, 30).forEach(item => {
+      const bookObj = BIBLE_BOOKS[item.book - 1];
+      const bookName = bookObj ? bookObj[0] : 'Unknown';
+      const refStr = `${bookName} ${item.chapter}:${item.verse}`;
+      const cleanSnippet = buildDisplayText(item.text);
+
+      const li = document.createElement('li');
+      li.style.padding = '8px';
+      li.style.borderBottom = '1px solid var(--border-color)';
+      li.style.cursor = 'pointer';
+      li.innerHTML = `<strong>${refStr}</strong>: ${cleanSnippet.substring(0, 70)}...`;
+
+      li.onclick = () => {
+        verseInput.value = refStr;
+        keywordResults.classList.add('hidden');
+        keywordInput.value = '';
+        fetchVerse(refStr, translationKey, false);
+      };
+
+      keywordResults.appendChild(li);
+    });
+
+  } catch (err) {
+    statusMessage.textContent = 'Error executing keyword search.';
+  }
+}
+
 async function fetchVerse(reference, translationKey, isNavigation = false) {
   statusMessage.textContent = `Fetching ${reference}...`;
   const cacheKey = `verse_cache_${reference}_${translationKey}`.toLowerCase();
 
-  // Check Offline Cache
   const cached = localStorage.getItem(cacheKey);
   if (cached) {
     const parsedCache = JSON.parse(cached);
@@ -252,7 +323,6 @@ async function fetchVerse(reference, translationKey, isNavigation = false) {
     let verses = [];
 
     if (endVerse && endVerse > verse) {
-      // Multi-verse range
       for (let v = verse; v <= endVerse; v++) {
         const url = `${API_BASE}/get-verse/${translationCode}/${bookId}/${chapter}/${v}/`;
         const res = await fetch(url);
@@ -261,7 +331,6 @@ async function fetchVerse(reference, translationKey, isNavigation = false) {
         verses.push(data);
       }
     } else {
-      // Single verse
       const url = `${API_BASE}/get-verse/${translationCode}/${bookId}/${chapter}/${verse}/`;
       const res = await fetch(url);
       if (!res.ok) throw new Error('Verse not found');
@@ -284,7 +353,6 @@ async function fetchVerse(reference, translationKey, isNavigation = false) {
     renderVerse(formatted);
     statusMessage.textContent = 'Verse ready.';
 
-    // Auto-project if toggled on
     if (isNavigation && autoProjectCheckbox.checked) {
       dispatch({ action: 'SHOW', data: formatted });
       statusMessage.textContent = 'Navigated & projected live!';
@@ -315,7 +383,6 @@ function parseStepper(ref) {
   }
 }
 
-// Stepper Navigation (Passing true for isNavigation)
 nextBtn.addEventListener('click', (e) => {
   e.preventDefault();
   if (!currentBook) return;
@@ -334,7 +401,6 @@ prevBtn.addEventListener('click', (e) => {
   fetchVerse(query, versionSelect.value, true);
 });
 
-// Broadcast Event Dispatcher
 showBtn.addEventListener('click', (e) => {
   e.preventDefault();
   if (!currentVerseData) return;
@@ -353,29 +419,32 @@ function dispatch(payload) {
   localStorage.setItem('obs_bible_event', JSON.stringify(payload));
 }
 
-// Settings Sync
 function saveAndSyncSettings() {
+  valWidth.textContent = cardWidthSlider.value;
+  valBottom.textContent = marginBottomSlider.value;
+  opacityVal.textContent = `${opacitySlider.value}%`;
+
   const settings = {
     fontFamily: fontFamilySelect.value,
     fontSize: fontSizeSelect.value,
     position: positionSelect.value,
     animation: animationSelect.value,
     opacity: opacitySlider.value,
+    cardWidth: cardWidthSlider.value,
+    marginBottom: marginBottomSlider.value,
     autoProject: autoProjectCheckbox.checked,
     bgImage: localStorage.getItem('obs_bible_bg_img') || ''
   };
 
-  opacityVal.textContent = `${opacitySlider.value}%`;
   localStorage.setItem('obs_bible_settings', JSON.stringify(settings));
   dispatch({ action: 'UPDATE_SETTINGS', settings });
 }
 
-[fontFamilySelect, fontSizeSelect, positionSelect, animationSelect, opacitySlider, autoProjectCheckbox].forEach(el => {
+[fontFamilySelect, fontSizeSelect, positionSelect, animationSelect, opacitySlider, cardWidthSlider, marginBottomSlider, autoProjectCheckbox].forEach(el => {
   el.addEventListener('change', saveAndSyncSettings);
   el.addEventListener('input', saveAndSyncSettings);
 });
 
-// Load saved settings on start
 window.addEventListener('DOMContentLoaded', () => {
   const saved = localStorage.getItem('obs_bible_settings');
   if (saved) {
@@ -389,6 +458,14 @@ window.addEventListener('DOMContentLoaded', () => {
         opacitySlider.value = s.opacity;
         opacityVal.textContent = `${s.opacity}%`;
       }
+      if (s.cardWidth !== undefined) {
+        cardWidthSlider.value = s.cardWidth;
+        valWidth.textContent = s.cardWidth;
+      }
+      if (s.marginBottom !== undefined) {
+        marginBottomSlider.value = s.marginBottom;
+        valBottom.textContent = s.marginBottom;
+      }
       if (s.autoProject !== undefined) {
         autoProjectCheckbox.checked = s.autoProject;
       }
@@ -396,7 +473,6 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Compressed Image Upload Handler
 bgUpload.addEventListener('change', (e) => {
   const file = e.target.files[0];
   if (!file) return;
@@ -443,6 +519,7 @@ bgUpload.addEventListener('change', (e) => {
   reader.readAsDataURL(file);
 });
 
+clearBgBtn.clearBgBtn = document.getElementById('clear-bg-btn');
 clearBgBtn.addEventListener('click', (e) => {
   e.preventDefault();
   localStorage.removeItem('obs_bible_bg_img');

@@ -11,6 +11,7 @@ function handleVerseEvent(eventData) {
     
     verseReference.innerHTML = `
       <div class="ref-title">
+        <span class="ref-icon">†</span>
         <span>${eventData.data.reference}</span>
       </div>
       <span class="translation-badge">${eventData.data.translation}</span>
@@ -47,6 +48,23 @@ function applySettings(s) {
   if (s.position) {
     wrapper.classList.remove('position-bottom', 'position-center', 'position-top');
     wrapper.classList.add(`position-${s.position}`);
+  }
+
+  // Apply Card Width and Bottom Spacing
+  const widthVal = s.cardWidth !== undefined ? s.cardWidth : 80;
+  const bottomVal = s.marginBottom !== undefined ? s.marginBottom : 40;
+
+  verseContainer.style.width = `${widthVal}vw`;
+  verseContainer.style.maxWidth = `${widthVal}vw`;
+
+  if (s.position === 'bottom' || !s.position) {
+    wrapper.style.paddingBottom = `${bottomVal}px`;
+    wrapper.style.paddingLeft = '40px';
+    wrapper.style.paddingRight = '40px';
+  } else {
+    wrapper.style.paddingBottom = '40px';
+    wrapper.style.paddingLeft = '40px';
+    wrapper.style.paddingRight = '40px';
   }
 
   if (s.animation) {

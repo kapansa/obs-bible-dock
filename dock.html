@@ -56,26 +56,35 @@
 
       <div class="form-row">
         <select id="version-select">
-          <option value="kjv" selected>KJV (King James Version)</option>
+          <option value="kjv" selected>KJV (King James)</option>
           <option value="nkjv">NKJV (New King James)</option>
           <option value="niv">NIV (New International)</option>
           <option value="niv2011">NIV 2011</option>
           <option value="esv">ESV (English Standard)</option>
-          <option value="nlt">NLT (New Living Translation)</option>
+          <option value="nlt">NLT (New Living)</option>
           <option value="nasb">NASB (New American Standard)</option>
           <option value="amp">AMP (Amplified Bible)</option>
           <option value="msg">MSG (The Message)</option>
           <option value="csb17">CSB (Christian Standard)</option>
-          <option value="web">WEB (World English Bible)</option>
+          <option value="web">WEB (World English)</option>
           <option value="asv">ASV (American Standard)</option>
           <option value="ylt">YLT (Young's Literal)</option>
           <option value="net">NET Bible</option>
           <option value="bsb">BSB (Berean Standard)</option>
-          <option value="rsv">RSV (Revised Standard)</option>
         </select>
         <button type="button" id="fetch-btn">Fetch</button>
       </div>
     </form>
+
+    <!-- Keyword Text Search Feature -->
+    <details class="keyword-search-panel">
+      <summary>🔍 Keyword / Text Search</summary>
+      <div class="keyword-search-box">
+        <input type="text" id="keyword-input" placeholder="Search text (e.g. love, grace)..." autocomplete="off">
+        <button type="button" id="keyword-search-btn">Search Text</button>
+      </div>
+      <ul id="keyword-results" class="keyword-results-list hidden"></ul>
+    </details>
 
     <!-- Preview & Stepper Card -->
     <div id="preview-card" class="preview-card hidden">
@@ -147,6 +156,16 @@
         <div class="setting-item full-width">
           <label for="opacity-slider">Card Opacity: <span id="opacity-val">92%</span></label>
           <input type="range" id="opacity-slider" min="0" max="100" value="92">
+        </div>
+
+        <div class="setting-item">
+          <label for="card-width">Card Width: <span id="val-width">80</span>%</label>
+          <input type="range" id="card-width" min="50" max="100" value="80">
+        </div>
+
+        <div class="setting-item">
+          <label for="margin-bottom">Bottom Spacing: <span id="val-bottom">40</span>px</label>
+          <input type="range" id="margin-bottom" min="0" max="150" value="40">
         </div>
 
         <div class="setting-item full-width checkbox-item">
