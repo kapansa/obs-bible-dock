@@ -110,7 +110,6 @@ const versionSelect = document.getElementById("version-select");
 const fetchBtn = document.getElementById("fetch-btn");
 const suggestions = document.getElementById("suggestions");
 
-// Keyword Search DOM Elements
 const keywordInput = document.getElementById("keyword-input");
 const keywordSearchBtn = document.getElementById("keyword-search-btn");
 const keywordResults = document.getElementById("keyword-results");
@@ -125,7 +124,6 @@ const prevBtn = document.getElementById("prev-btn");
 const nextBtn = document.getElementById("next-btn");
 const statusMessage = document.getElementById("status-message");
 
-// Settings Elements
 const fontFamilySelect = document.getElementById("font-family");
 const fontSizeSelect = document.getElementById("font-size");
 const positionSelect = document.getElementById("position-select");
@@ -147,7 +145,6 @@ let currentBook = "",
   currentChapter = 1,
   currentVerseNum = 1;
 
-// Initialize Books Dropdown
 BIBLE_BOOKS.forEach(([fullName]) => {
   const opt = document.createElement("option");
   opt.value = fullName;
@@ -155,7 +152,6 @@ BIBLE_BOOKS.forEach(([fullName]) => {
   bookSelect.appendChild(opt);
 });
 
-// Auto-suggest implementation
 verseInput.addEventListener("input", () => {
   const val = verseInput.value.toLowerCase().trim();
   suggestions.innerHTML = "";
@@ -186,7 +182,6 @@ verseInput.addEventListener("input", () => {
   }
 });
 
-// Quick Chips Handler
 document.querySelectorAll(".chip").forEach((chip) => {
   chip.addEventListener("click", (e) => {
     e.preventDefault();
@@ -198,7 +193,6 @@ document.querySelectorAll(".chip").forEach((chip) => {
   });
 });
 
-// Dropdown Cascading Logic with dynamic chapter verse count fetching
 bookSelect.addEventListener("change", () => {
   populateChapters(bookSelect.value);
 });
@@ -216,7 +210,6 @@ chapterSelect.addEventListener("change", async () => {
 
   statusMessage.textContent = "Loading chapter verses...";
   try {
-    // Query Bolls.life chapter endpoint to get all verses in the chapter dynamically
     const res = await fetch(
       `${API_BASE}/get-chapter/${translationCode}/${bookId}/${chapterNum}/`,
     );
@@ -230,19 +223,7 @@ chapterSelect.addEventListener("change", async () => {
     }
   } catch (_) {}
 
-  // Fallback max verses if network request fails
-  let fallbackMax = 60;
-  if (bookName === "Psalms" && parseInt(chapterNum) === 119) {
-    fallbackMax = 176;
-  } else if (
-    bookName === "Psalms" ||
-    bookName === "Genesis" ||
-    bookName === "Numbers" ||
-    bookName === "Isaiah"
-  ) {
-    fallbackMax = 80;
-  }
-  populateVerses(fallbackMax);
+  populateVerses(60);
   statusMessage.textContent = "Ready";
 });
 
@@ -278,7 +259,6 @@ function populateChapters(bookName) {
 function populateVerses(count) {
   verseSelect.innerHTML = '<option value="">Vs</option>';
   verseSelect.disabled = false;
-  // Dynamically populate up to the exact count returned by the API or fallback max
   for (let i = 1; i <= Math.max(count, 176); i++) {
     const opt = document.createElement("option");
     opt.value = i;
@@ -329,7 +309,6 @@ fetchBtn.addEventListener("click", (e) => {
   handleFetch(false);
 });
 
-// Keyword Search Logic
 keywordSearchBtn.addEventListener("click", (e) => {
   e.preventDefault();
   performKeywordSearch();
@@ -352,8 +331,7 @@ async function performKeywordSearch() {
 
   const translationKey = versionSelect.value;
   const translationCode =
-    TRANSLATION_MAP[translationKey.toLowerCase()] ||
-    translationKey.toUpperCase();
+    TRANSLATION_MAP[translationKey.toLowerCase()] || "KJV";
 
   try {
     const url = `${API_BASE}/search/${translationCode}/${encodeURIComponent(query)}/`;
@@ -435,33 +413,45 @@ async function fetchVerse(reference, translationKey, isNavigation = false) {
 
   const bookId = bookIndex + 1;
   const translationCode =
-    TRANSLATION_MAP[translationKey.toLowerCase()] ||
-    translationKey.toUpperCase();
+    TRANSLATION_MAP[translationKey.toLowerCase()] || "KJV";
 
   try {
-    let verses = [];
+    // First fetch the full chapter list to validate maximum verse bounds and avoid 404 errors
+    const chapterRes = await fetch(
+      `${API_BASE}/get-chapter/${translationCode}/${bookId}/${chapter}/`,
+    );
+    if (!chapterRes.ok) throw new Error("Chapter not found");
+    const chapterVerses = await chapterRes.json();
 
-    if (endVerse && endVerse > verse) {
-      for (let v = verse; v <= endVerse; v++) {
+    if (!Array.isArray(chapterVerses) || verse > chapterVerses.length) {
+      statusMessage.textContent = `Error: ${book} ${chapter} only has ${chapterVerses.length} verses.`;
+      previewCard.classList.add("hidden");
+      return;
+    }
+
+    let verses = [];
+    const targetEnd = endVerse
+      ? Math.min(endVerse, chapterVerses.length)
+      : verse;
+
+    for (let v = verse; v <= targetEnd; v++) {
+      const match = chapterVerses.find((item) => item.verse === v);
+      if (match) {
+        verses.push(match);
+      } else {
         const url = `${API_BASE}/get-verse/${translationCode}/${bookId}/${chapter}/${v}/`;
         const res = await fetch(url);
-        if (!res.ok) throw new Error("Verse range fetch error");
-        const data = await res.json();
-        verses.push(data);
+        if (res.ok) verses.push(await res.json());
       }
-    } else {
-      const url = `${API_BASE}/get-verse/${translationCode}/${bookId}/${chapter}/${verse}/`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error("Verse not found");
-      const data = await res.json();
-      verses.push(data);
     }
+
+    if (verses.length === 0) throw new Error("Verse not found");
 
     const combinedText = verses.map((v) => buildDisplayText(v.text)).join(" ");
     const bookName = BIBLE_BOOKS[bookIndex][0];
     const verseRef =
       endVerse && endVerse > verse
-        ? `${chapter}:${verse}-${endVerse}`
+        ? `${chapter}:${verse}-${targetEnd}`
         : `${chapter}:${verse}`;
     const displayRef = `${bookName} ${verseRef}`;
 
